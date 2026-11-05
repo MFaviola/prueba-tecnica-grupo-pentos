@@ -5,11 +5,12 @@ import { ClientRepository } from '../../application/interfaces/client.repository
 import { LoanApplicationRepository } from '../../application/interfaces/loan-application.repository.js';
 import { KnexClientRepository } from '../../infrastructure/repositories/knex-client.repository.js';
 import { KnexLoanApplicationRepository } from '../../infrastructure/repositories/knex-loan-application.repository.js';
+import { ListLoanApplicationsUseCase } from '../../application/use-cases/loan-application/list-loan-applications.use-case.js';
 
 @Module({
   controllers: [LoanApplicationController],
   providers: [
-    CreateLoanApplicationUseCase,
+    CreateLoanApplicationUseCase,ListLoanApplicationsUseCase,
     { provide: ClientRepository, useClass: KnexClientRepository },
     { provide: LoanApplicationRepository, useClass: KnexLoanApplicationRepository },
   ],

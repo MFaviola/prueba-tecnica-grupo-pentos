@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LoanApplicationRepository } from '../../application/interfaces/loan-application.repository.js';
+import { LoanApplicationRepository, type LoanApplicationFilters, type PaginatedResult } from '../../application/interfaces/loan-application.repository.js';
 import type { Knex } from 'knex';
 import { KNEX } from '../database/database.constants.js';
 import { LoanApplication, LoanStatus } from '../../domain/entities/loan-application.entity.js';
-import { ScheduledInstallment } from '../../domain/value-objects/scheduled-installment.js';
+import type { ScheduledInstallment } from '../../domain/value-objects/scheduled-installment.js';
 
 @Injectable()
 export class KnexLoanApplicationRepository extends LoanApplicationRepository {
@@ -51,7 +51,29 @@ export class KnexLoanApplicationRepository extends LoanApplicationRepository {
     };
   }
 
+async findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplication>> {
+  const { page, limit, status, from, to } = filters;
 
+  const baseQuery = this.knex('loan_application').modify((query) => {
+    if (status) query.where('status', status);
+    if (from) query.where('created_at', '>=', from);
+    if (to) query.where('created_at', '<', to);
+  });
+
+  const countRow = await baseQuery.clone().count<{ total: number }[]>({ total: '*' }).first();
+  const total = Number(countRow?.total ?? 0);
+  const rows = await baseQuery
+    .clone()
+    .select('*')
+    .orderBy([{ column: 'created_at', order: 'desc' }, { column: 'id', order: 'desc' }])
+    .limit(limit)
+    .offset((page - 1) * limit);
+
+  return {
+    data: rows.map((row:any) => this.toEntity(row)),
+    meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
+  };
+}
 
 
 }
