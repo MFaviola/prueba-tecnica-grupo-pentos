@@ -71,7 +71,7 @@ Están en la carpeta `sql/`, junto con los índices recomendados.
 ## Preguntas de criterio
 
 **¿Cuándo usarías una transacción con Knex en este ejercicio?**
-Al crear una solicitud aprobada, porque se guardan la solicitud y sus cuotas, y deben quedar consistentes.
+Al crear una solicitud aprobada, porque se guardan la solicitud y sus cuotas, y deben quedar consistentes decidi   en el repositorio de infraestructura: si falla cualquier insert, se revierte todo y nunca queda una solicitud aprobada sin su plan de pagos.
 
 **¿Qué diferencia práctica hay entre un Guard y un Interceptor?**
 El Guard decide si la petición puede llegar al handler, el Interceptor envuelve la ejecución antes y después, y puede transformar la respuesta, registrar logs o medir tiempos.
