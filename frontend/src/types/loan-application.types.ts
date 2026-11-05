@@ -9,6 +9,10 @@ export interface LoanApplication {
   createdAt: string;
 }
 
+export interface LoanApplicationListItem extends LoanApplication {
+  clientName: string;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: { page: number; limit: number; total: number; totalPages: number };

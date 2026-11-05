@@ -14,7 +14,10 @@ export interface PaginatedResult<T> {
   meta: { page: number; limit: number; total: number; totalPages: number };
 }
 
+export interface LoanApplicationListItem extends LoanApplication {
+  clientName: string;
+}
 export abstract class LoanApplicationRepository{
     abstract createWithInstallments ( data: {clientId: number; requestedAmount: number ; termMonths: number ; status: LoanStatus}, installments: ScheduledInstallment[]): Promise<LoanApplication>;
-    abstract findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplication>>;
-}
+abstract findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplicationListItem>>;}
+

@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import type { LoanApplication } from '../types/loan-application.types';
-
+import type {LoanApplicationListItem} from '../types/loan-application.types'
 const currency = new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' });
 const dateFormat = new Intl.DateTimeFormat('es-HN', { dateStyle: 'medium', timeStyle: 'short' });
 
@@ -11,7 +10,7 @@ const statusLabels = {
 } as const;
 
 interface Props {
-  items: LoanApplication[];
+  items: LoanApplicationListItem[];
 }
 
 export const LoanApplicationsTable = memo(function LoanApplicationsTable({ items }: Props) {
@@ -23,20 +22,19 @@ export const LoanApplicationsTable = memo(function LoanApplicationsTable({ items
     <table>
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Id</th>
           <th>Cliente</th>
           <th>Monto</th>
           <th>Plazo</th>
           <th>Estado</th>
-          <th>Creada</th>
+          <th>Fecha de Creación</th>
         </tr>
       </thead>
       <tbody>
         {items.map((item) => (
           <tr key={item.id}>
             <td>{item.id}</td>
-            <td>{item.clientId}</td>
-            <td>{currency.format(item.requestedAmount)}</td>
+            <td>{item.clientName}</td>            <td>{currency.format(item.requestedAmount)}</td>
             <td>{item.termMonths} meses</td>
             <td>
               <span className={`badge badge-${item.status}`}>{statusLabels[item.status]}</span>

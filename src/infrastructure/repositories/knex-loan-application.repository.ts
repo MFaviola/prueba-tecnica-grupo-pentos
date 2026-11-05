@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LoanApplicationRepository, type LoanApplicationFilters, type PaginatedResult } from '../../application/interfaces/loan-application.repository.js';
+import { LoanApplicationListItem, LoanApplicationRepository, type LoanApplicationFilters, type PaginatedResult } from '../../application/interfaces/loan-application.repository.js';
 import type { Knex } from 'knex';
 import { KNEX } from '../database/database.constants.js';
 import { LoanApplication, LoanStatus } from '../../domain/entities/loan-application.entity.js';
@@ -51,29 +51,33 @@ export class KnexLoanApplicationRepository extends LoanApplicationRepository {
     };
   }
 
-async findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplication>> {
+async findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplicationListItem>> {
   const { page, limit, status, from, to } = filters;
 
   const baseQuery = this.knex('loan_application').modify((query) => {
-    if (status) query.where('status', status);
-    if (from) query.where('created_at', '>=', from);
-    if (to) query.where('created_at', '<', to);
+    if (status) query.where('loan_application.status', status);
+    if (from) query.where('loan_application.created_at', '>=', from);
+    if (to) query.where('loan_application.created_at', '<', to);
   });
 
   const countRow = await baseQuery.clone().count<{ total: number }[]>({ total: '*' }).first();
   const total = Number(countRow?.total ?? 0);
+
   const rows = await baseQuery
     .clone()
-    .select('*')
-    .orderBy([{ column: 'created_at', order: 'desc' }, { column: 'id', order: 'desc' }])
+    .join('client', 'client.id', 'loan_application.client_id')
+    .select('loan_application.*', 'client.full_name as client_name')
+    .orderBy([
+      { column: 'loan_application.created_at', order: 'desc' },
+      { column: 'loan_application.id', order: 'desc' },
+    ])
     .limit(limit)
     .offset((page - 1) * limit);
 
   return {
-    data: rows.map((row:any) => this.toEntity(row)),
+    data: rows.map((row: any) => ({ ...this.toEntity(row), clientName: row.client_name })),
     meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
   };
 }
-
 
 }
