@@ -1,6 +1,6 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import type { Knex } from 'knex';
-import { KNEX } from './database/database.constants.js';
+import { KNEX } from './infrastructure/database/database.constants.js';
 
 @Controller()
 export class AppController {
