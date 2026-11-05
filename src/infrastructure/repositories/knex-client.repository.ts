@@ -12,8 +12,15 @@ export class KnexClientRepository extends ClientRepository {
 
   async findById(id: number): Promise<Client | null> {
     const row = await this.knex('client').where({ id }).first();
-    if (!row) return null;
+    return row ? this.toEntity(row) : null;
+  }
 
+  async findAll(): Promise<Client[]> {
+    const rows = await this.knex('client').select('*').orderBy('full_name', 'asc');
+    return rows.map((row: any) => this.toEntity(row));
+  }
+
+  private toEntity(row: any): Client {
     return {
       id: row.id,
       fullName: row.full_name,

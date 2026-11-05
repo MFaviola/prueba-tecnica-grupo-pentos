@@ -4,9 +4,10 @@ import { AppService } from './app.service.js';
 import { DatabaseModule } from './infrastructure/database/database.module.js';
 import { ConfigModule } from '@nestjs/config';
 import { LoanApplicationModule } from './api/loan-application/loan-application.module.js';
+import { ClientModule } from './api/client/client.module.js';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule,LoanApplicationModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule,LoanApplicationModule,ClientModule],
   controllers: [AppController],
   providers: [AppService],
 })
