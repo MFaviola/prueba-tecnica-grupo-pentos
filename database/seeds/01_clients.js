@@ -10,9 +10,7 @@ export async function seed(knex) {
   await knex('client').insert([
     { full_name: 'Mindy Campos', dni: '1234567897531', monthly_income: 25000.0 },
     { full_name: 'Rodrigo Campos', dni: '1234567897539', monthly_income: 18000.0 },
-
     { full_name: 'Faviola Campos', dni: '1234567897532', monthly_income: 50000 },
- { full_name: 'María Fernanda López', dni: '0801198505678', monthly_income: 35000.0 },
     { full_name: 'José Luis Peralez', dni: '0301199209876', monthly_income: 225000.5 },
     { full_name: 'Miley Cyrus', dni: '0101198803456', monthly_income: 48000.0 },
     { full_name: 'Adele Blue', dni: '1801199507890', monthly_income: 150000.0 },
