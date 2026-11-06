@@ -177,3 +177,16 @@ button:disabled { background: #d6d3d1; color: #a8a29e; cursor: not-allowed; }
   padding: 4px 8px;
 }
 .modal-close:hover:not(:disabled) { background: var(--bg); }
+
+.modal { max-width: 520px; }
+.modal-title { margin: 0 0 4px; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; padding-right: 32px; }
+.subtitle { margin: 0 0 16px; color: var(--muted); font-size: .9rem; }
+.total { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--border); text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.link-button {
+  background: transparent;
+  color: var(--brand);
+  padding: 4px 8px;
+  font-size: .85rem;
+}
+.link-button:hover:not(:disabled) { background: var(--brand-soft); }

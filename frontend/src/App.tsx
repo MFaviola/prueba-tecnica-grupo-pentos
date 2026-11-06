@@ -4,6 +4,8 @@ import type { LoanApplicationListItem, LoanStatus, PaginatedResponse } from './t
 import { useDebounce } from './hooks/useDebounce';
 import { LoanApplicationsTable } from './components/LoanApplicationsTable';
 import { CreateLoanApplicationForm } from './components/CreateLoanApplicationForm';
+import { InstallmentsPlan } from './components/InstallmentsPlan';
+import { Modal } from './components/Modal';
 
 const STATUS_OPTIONS: { value: LoanStatus; label: string }[] = [
   { value: 'pending', label: 'Pendiente' },
@@ -30,7 +32,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [selectedLoanId, setSelectedLoanId] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
   const matchedStatus = matchStatus(debouncedStatus);
@@ -52,9 +55,7 @@ export default function App() {
       .then(setResult)
       .catch((err: Error) => {
         if (err.name === 'AbortError') return;
-        setError(
-          err.message === 'Failed to fetch' ? 'No se pudo conectar con el servidor' : err.message,
-        );
+        setError(err.message === 'Failed to fetch' ? 'No se pudo conectar con el servidor' : err.message);
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
@@ -63,17 +64,11 @@ export default function App() {
     return () => controller.abort();
   }, [page, statusFilter, isValidStatus, refreshKey]);
 
-  useEffect(() => {
-    if (!isModalOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsModalOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen]);
+  const closeCreate = useCallback(() => setIsCreateOpen(false), []);
+  const closeInstallments = useCallback(() => setSelectedLoanId(null), []);
 
   const handleCreated = useCallback(() => {
-    setIsModalOpen(false);
+    setIsCreateOpen(false);
     setNotice('Solicitud creada correctamente');
     setPage(1);
     setRefreshKey((key) => key + 1);
@@ -88,7 +83,7 @@ export default function App() {
         <button
           onClick={() => {
             setNotice(null);
-            setIsModalOpen(true);
+            setIsCreateOpen(true);
           }}
         >
           + Nueva solicitud
@@ -117,7 +112,7 @@ export default function App() {
         {isValidStatus && loading && <p className="message">Cargando solicitudes...</p>}
         {isValidStatus && !loading && error && <p className="message error">{error}</p>}
         {isValidStatus && !loading && !error && result && (
-          <LoanApplicationsTable items={result.data} />
+          <LoanApplicationsTable items={result.data} onViewInstallments={setSelectedLoanId} />
         )}
 
         <div className="pagination">
@@ -134,24 +129,16 @@ export default function App() {
         </div>
       </section>
 
-      {isModalOpen && (
-        <div className="modal-backdrop" onClick={() => setIsModalOpen(false)}>
-          <div
-            className="modal"
-            role="dialog"
-            aria-modal="true"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              className="modal-close"
-              aria-label="Cerrar"
-              onClick={() => setIsModalOpen(false)}
-            >
-              ×
-            </button>
-            <CreateLoanApplicationForm onCreated={handleCreated} />
-          </div>
-        </div>
+      {isCreateOpen && (
+        <Modal onClose={closeCreate}>
+          <CreateLoanApplicationForm onCreated={handleCreated} />
+        </Modal>
+      )}
+
+      {selectedLoanId !== null && (
+        <Modal onClose={closeInstallments}>
+          <InstallmentsPlan loanApplicationId={selectedLoanId} />
+        </Modal>
       )}
     </main>
   );

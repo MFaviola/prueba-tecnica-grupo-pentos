@@ -1,4 +1,4 @@
-# AkiCash · Solicitudes de crédito
+# Solicitudes de crédito
 
 Backend en NestJS + Knex + MySQL y frontend en React.
 
@@ -44,6 +44,8 @@ npm test
 - `GET /loan-applications?page=1&limit=10&status=approved&from=2026-11-01&to=2026-11-30`: lista con paginación y filtros opcionales.
 - `POST /loan-applications`: crea una solicitud; si viene `approved`, genera las cuotas en una transacción.
 - `GET /clients`: no lo pedía el enunciado; lo agregué para que el formulario permita buscar al cliente por nombre o DNI.
+
+- `GET /loan-applications/:id/installments`: devuelve el plan de cuotas de una solicitud (404 si no existe).
 
 ## Arquitectura
 

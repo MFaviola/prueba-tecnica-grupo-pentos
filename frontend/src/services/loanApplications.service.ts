@@ -1,5 +1,6 @@
 import { API_URL } from '../config/env';
 import { handleResponse } from './http';
+import type { LoanApplicationInstallments } from '../types/installment.types';
 import type {
   CreateLoanApplicationInput,
   LoanApplication,
@@ -30,4 +31,12 @@ export async function createLoanApplication(
     body: JSON.stringify(input),
   });
   return handleResponse<LoanApplication>(response);
+}
+
+export async function fetchLoanApplicationInstallments(
+  id: number,
+  signal?: AbortSignal,
+): Promise<LoanApplicationInstallments> {
+  const response = await fetch(`${API_URL}/loan-applications/${id}/installments`, { signal });
+  return handleResponse<LoanApplicationInstallments>(response);
 }

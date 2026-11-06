@@ -6,6 +6,9 @@ import { LoanApplicationRepository } from '../../application/interfaces/loan-app
 import { KnexClientRepository } from '../../infrastructure/repositories/knex-client.repository.js';
 import { KnexLoanApplicationRepository } from '../../infrastructure/repositories/knex-loan-application.repository.js';
 import { ListLoanApplicationsUseCase } from '../../application/use-cases/loan-application/list-loan-applications.use-case.js';
+import { GetLoanApplicationInstallmentsUseCase } from '../../application/use-cases/loan-application/get-loan-application-installments.use-case.js';
+import { InstallmentRepository } from '../../application/interfaces/installment.repository.js';
+import { KnexInstallmentRepository } from '../../infrastructure/repositories/knex-installment.repository.js';
 
 @Module({
   controllers: [LoanApplicationController],
@@ -13,6 +16,9 @@ import { ListLoanApplicationsUseCase } from '../../application/use-cases/loan-ap
     CreateLoanApplicationUseCase,ListLoanApplicationsUseCase,
     { provide: ClientRepository, useClass: KnexClientRepository },
     { provide: LoanApplicationRepository, useClass: KnexLoanApplicationRepository },
+    
+    GetLoanApplicationInstallmentsUseCase,
+    { provide: InstallmentRepository, useClass: KnexInstallmentRepository },
   ],
 })
 export class LoanApplicationModule {}

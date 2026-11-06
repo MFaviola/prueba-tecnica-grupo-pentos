@@ -19,5 +19,8 @@ export interface LoanApplicationListItem extends LoanApplication {
 }
 export abstract class LoanApplicationRepository{
     abstract createWithInstallments ( data: {clientId: number; requestedAmount: number ; termMonths: number ; status: LoanStatus}, installments: ScheduledInstallment[]): Promise<LoanApplication>;
-abstract findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplicationListItem>>;}
+    abstract findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanApplicationListItem>>;
+    abstract findById(id: number): Promise<LoanApplicationListItem | null>;
+    
+  }
 

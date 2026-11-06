@@ -80,4 +80,14 @@ async findAll(filters: LoanApplicationFilters): Promise<PaginatedResult<LoanAppl
   };
 }
 
+async findById(id: number): Promise<LoanApplicationListItem | null> {
+  const row = await this.knex('loan_application')
+    .join('client', 'client.id', 'loan_application.client_id')
+    .select('loan_application.*', 'client.full_name as client_name')
+    .where('loan_application.id', id)
+    .first();
+
+  return row ? { ...this.toEntity(row), clientName: row.client_name } : null;
+}
+
 }
