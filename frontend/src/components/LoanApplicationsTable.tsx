@@ -21,6 +21,8 @@ export const LoanApplicationsTable = memo(function LoanApplicationsTable({ items
   }
 
   return (
+    <div className="table-scroll">
+
     <table>
       <thead>
         <tr>
@@ -55,5 +57,6 @@ export const LoanApplicationsTable = memo(function LoanApplicationsTable({ items
         ))}
       </tbody>
     </table>
+    </div>
   );
 });
