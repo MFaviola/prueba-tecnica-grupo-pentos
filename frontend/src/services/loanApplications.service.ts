@@ -3,6 +3,7 @@ import { handleResponse } from './http';
 import type {
   CreateLoanApplicationInput,
   LoanApplication,
+  LoanApplicationListItem,
   LoanStatus,
   PaginatedResponse,
 } from '../types/loan-application.types';
@@ -10,7 +11,7 @@ import type {
 export async function fetchLoanApplications(
   params: { page: number; limit: number; status?: LoanStatus },
   signal?: AbortSignal,
-): Promise<PaginatedResponse<LoanApplication>> {
+): Promise<PaginatedResponse<LoanApplicationListItem>> {
   const query = new URLSearchParams({
     page: String(params.page),
     limit: String(params.limit),
@@ -18,8 +19,7 @@ export async function fetchLoanApplications(
   if (params.status) query.set('status', params.status);
 
   const response = await fetch(`${API_URL}/loan-applications?${query}`, { signal });
-  return handleResponse<PaginatedResponse<LoanApplication>>(response);
-}
+return handleResponse<PaginatedResponse<LoanApplicationListItem>>(response);}
 
 export async function createLoanApplication(
   input: CreateLoanApplicationInput,

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchLoanApplications } from './services/loanApplications.service';
-import type { LoanApplication, LoanStatus, PaginatedResponse } from './types/loan-application.types';
+import type { LoanApplicationListItem, LoanStatus, PaginatedResponse } from './types/loan-application.types';
 import { useDebounce } from './hooks/useDebounce';
 import { LoanApplicationsTable } from './components/LoanApplicationsTable';
 import { CreateLoanApplicationForm } from './components/CreateLoanApplicationForm';
@@ -26,7 +26,7 @@ export default function App() {
   const debouncedStatus = useDebounce(normalize(statusInput), 400);
 
   const [page, setPage] = useState(1);
-  const [result, setResult] = useState<PaginatedResponse<LoanApplication> | null>(null);
+  const [result, setResult] = useState<PaginatedResponse<LoanApplicationListItem> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -84,7 +84,7 @@ export default function App() {
   return (
     <main className="container">
       <header>
-        <h1>AkiCash · Solicitudes de crédito</h1>
+        <h1>Solicitudes de crédito</h1>
         <button
           onClick={() => {
             setNotice(null);
