@@ -33,20 +33,19 @@ npm run dev
 
 La app queda en `http://localhost:5173`.
 
-
-## Visualizacion
+## Capturas
 
 ### Lista de solicitudes
-![Lista de solicitudes]
-(docs/screenshots/solicitudes.png)
+![Lista de solicitudes](docs/screenshots/solicitudes.png)
 
 ### Nueva solicitud
-![Formulario de nueva solicitud](
-docs/screenshots/nueva-solicitud.png)
+![Formulario de nueva solicitud](docs/screenshots/nueva-solicitud.png)
 
 ### Plan de cuotas
-![Plan de cuotas de una solicitud]
-(docs/screenshots/plan-de-cuotas.png)
+![Plan de cuotas de una solicitud](docs/screenshots/plan-de-cuotas.png)
+
+### Tests
+![Tests unitarios](docs/screenshots/tests.png)
 
 ### Tests
 
